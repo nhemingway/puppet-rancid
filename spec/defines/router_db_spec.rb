@@ -2,69 +2,88 @@ require 'spec_helper'
 describe 'rancid::router_db' do
   let(:title) { 'group1' }
 
-  let(:facts) { { :osfamily => 'Debian' } }
+  let(:facts) do
+    {
+      os: {
+        family: 'Debian',
+      },
+    }
+  end
+
+  let(:params) {
+    {
+      rancid_path_env: ['/bin', '/usr/bin'],
+    }
+  }
 
   context 'Use correct field separator' do
-    let(:params) {
-      { :devices => {
-          'group1' => {
-            'foo.mydomain' => {
-              'hostname' => 'foo.mydomain',
-              'type' => 'cisco',
-              'status' => 'up',
+    let(:params) do
+      super().merge(
+        { :devices => {
+            'group1' => {
+              'foo.mydomain' => {
+                'hostname' => 'foo.mydomain',
+                'type' => 'cisco',
+                'status' => 'up',
+              }
             }
-          }
-        },
-        :router_db_mode => 0123,
-      }
-    }
+          },
+          :router_db_mode => '0123',
+        }
+      )
+    end
 
     it {
       should contain_file('/var/lib/rancid/group1/router.db')
                .with_content(/^foo.mydomain;cisco;up$/)
                .with_owner('rancid')
                .with_group('rancid')
-               .with_mode(0123)
+               .with_mode('0123')
     }
   end
 
   context 'router.db should be stable with multiple entries' do
-    let(:params) {
-      { :devices => {
-          'group1' => {
-            'foo.mydomain' => {
-              'hostname' => 'foo.mydomain',
-              'type' => 'cisco',
-              'status' => 'up',
-            },
-            'bar.mydomain' => {
-              'hostname' => 'bar.mydomain',
-              'type' => 'dnos10',
-              'status' => 'up',
+    let(:params) do
+      super().merge(
+        { :devices => {
+            'group1' => {
+              'foo.mydomain' => {
+                'hostname' => 'foo.mydomain',
+                'type' => 'cisco',
+                'status' => 'up',
+              },
+              'bar.mydomain' => {
+                'hostname' => 'bar.mydomain',
+                'type' => 'dnos10',
+                'status' => 'up',
+              }
             }
-          }
-        },
-        :router_db_mode => 0123,
-      }
-    }
+          },
+          :router_db_mode => '0123',
+        }
+      )
+    end
 
     it {
       should contain_file('/var/lib/rancid/group1/router.db')
                .with_content(/\Abar.mydomain;dnos10;up\nfoo.mydomain;cisco;up\Z/)
                .with_owner('rancid')
                .with_group('rancid')
-               .with_mode(0123)
+               .with_mode('0123')
     }
   end
 
   context 'managing remote urls' do
     context 'we are managing them' do
-      let(:params) {
-        { :vcs_remote_urls => {
-            'group1' => 'http://my-server/my-path.git',
-          },
-        }
-      }
+      let(:params) do
+        super().merge(
+          {
+            :vcs_remote_urls => {
+              'group1' => 'http://my-server/my-path.git',
+            },
+          }
+        )
+      end
 
       it 'should point at the requested remote url' do
         should contain_exec('setup git remote group1')
@@ -82,9 +101,11 @@ describe 'rancid::router_db' do
     end
 
     context 'we are not managing them' do
-      let(:params) {
-        {}
-      }
+      let(:params) do
+        super().merge(
+          {}
+        )
+      end
 
       it {
         should_not contain_exec(/setup git remote/)

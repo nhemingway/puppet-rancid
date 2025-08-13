@@ -1,10 +1,12 @@
 require 'spec_helper'
-describe 'rancid' do
 
-  context 'with default params on EL 6' do
+describe 'rancid' do
+  context 'with default params on RedHat' do
     let(:facts) do
-      { :osfamily                   => 'RedHat',
-        :operatingsystemmajrelease  => '6',
+      {
+        os: {
+          family: 'RedHat',
+        },
       }
     end
 
@@ -26,7 +28,13 @@ describe 'rancid' do
   end
 
   context 'with default params on osfamily Debian' do
-    let(:facts) { { :osfamily => 'Debian' } }
+    let(:facts) do
+      {
+        os: {
+          family: 'Debian',
+        },
+      }
+    end
 
     it { should compile.with_all_deps }
 
@@ -46,10 +54,16 @@ describe 'rancid' do
   end
 
   context 'version control systems' do
-    let(:facts) { { :osfamily => 'Debian' } }
+    let(:facts) do
+      {
+        os: {
+          family: 'Debian',
+        },
+      }
+    end
     context 'cvs' do
       let(:params) { {:vcs => 'cvs'} }
-      it { is_expected.to contain_file('rancid_config')
+      it { is_expected.to contain_file('/etc/rancid/rancid.conf')
                             .with_content(/^RCSSYS=cvs;/)
                             .with_content(/^CVSROOT=\$BASEDIR\/CVS;/)
       }
@@ -57,7 +71,7 @@ describe 'rancid' do
 
     context 'cvs with a root' do
       let(:params) { {:vcs => 'cvs', :vcsroot => '/my/repo'} }
-      it { is_expected.to contain_file('rancid_config')
+      it { is_expected.to contain_file('/etc/rancid/rancid.conf')
                             .with_content(/^RCSSYS=cvs;/)
                             .with_content(/^CVSROOT=\/my\/repo;/)
       }
@@ -65,7 +79,7 @@ describe 'rancid' do
 
     context 'svn' do
       let(:params) { {:vcs => 'svn'} }
-      it { is_expected.to contain_file('rancid_config')
+      it { is_expected.to contain_file('/etc/rancid/rancid.conf')
                             .with_content(/^CVSROOT=\$BASEDIR\/svn;/)
                             .with_content(/^RCSSYS=svn;/)
       }
@@ -73,7 +87,7 @@ describe 'rancid' do
 
     context 'svn with a root' do
       let(:params) { {:vcs => 'svn', :vcsroot => '/my/repo'} }
-      it { is_expected.to contain_file('rancid_config')
+      it { is_expected.to contain_file('/etc/rancid/rancid.conf')
                             .with_content(/^RCSSYS=svn;/)
                             .with_content(/^CVSROOT=\/my\/repo;/)
       }
@@ -81,7 +95,7 @@ describe 'rancid' do
 
     context 'git' do
       let(:params) { {:vcs => 'git'} }
-      it { is_expected.to contain_file('rancid_config')
+      it { is_expected.to contain_file('/etc/rancid/rancid.conf')
                             .with_content(/^CVSROOT=\$BASEDIR\/.git;/)
                             .with_content(/^RCSSYS=git;/)
       }
@@ -89,7 +103,7 @@ describe 'rancid' do
 
     context 'git with a root' do
       let(:params) { {:vcs => 'git', :vcsroot => '/my/repo'} }
-      it { is_expected.to contain_file('rancid_config')
+      it { is_expected.to contain_file('/etc/rancid/rancid.conf')
                             .with_content(/^RCSSYS=git;/)
                             .with_content(/^CVSROOT=\/my\/repo;/)
       }
