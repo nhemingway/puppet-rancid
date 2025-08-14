@@ -22,7 +22,7 @@ define rancid::router_db (
       cwd     => "${rancid::homedir_real}/${name}",
       path    => $rancid_cvs_path,
       user    => $rancid::user_real,
-      unless  => "git remote -v | grep ${remote_url}"
+      unless  => "git remote -v | grep ${remote_url}",
     }
 
     file { "post-commit hook for ${name}":
@@ -34,8 +34,8 @@ define rancid::router_db (
     }
 
     file { "rancid default git remote ${name}":
-      path   => "${rancid::homedir_real}/.git/${name}",
       ensure => absent,
+      path   => "${rancid::homedir_real}/.git/${name}",
       force  => true,
       backup => false,
     }

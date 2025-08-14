@@ -148,7 +148,7 @@ class rancid (
 
   # Debian and RedHat (currently) use the same names for these packages, so no
   # need to switch on osfamily
-  case $vcs_real {
+  case $vcs_real { # lint:ignore:case_without_default
     'cvs': {
       $vcs_packages = ['cvs']
     }
