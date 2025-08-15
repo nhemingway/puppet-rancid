@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppetlabs_spec_helper/module_spec_helper'
 
 RSpec.configure do |config|
@@ -11,6 +13,6 @@ RSpec.configure do |config|
     Facter.clear_messages
   end
   config.default_facts = {
-    :environment => 'rp_env',
+    environment: 'rp_env',
   }
 end
