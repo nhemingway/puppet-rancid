@@ -1,6 +1,6 @@
-# == Define: rancid::router_db
+# == Define: rancid::group
 #
-define rancid::router_db (
+define rancid::group (
   Hash                        $devices         = {},
   Array[Stdlib::Absolutepath] $rancid_path_env = [ '/bin', '/usr/bin' ],
   String                      $router_db_mode  = '0640',
@@ -43,16 +43,12 @@ define rancid::router_db (
     }
   }
 
-  if ( $devices[$name] ) {
-    file { "${rancid::homedir}/${name}/router.db":
-      ensure  => 'file',
-      owner   => $rancid::user,
-      group   => $rancid::group,
-      mode    => $router_db_mode,
-      content => template('rancid/router.db.erb'),
-      require => Exec["rancid-cvs-${name}"],
-    }
-  } else {
-    notify { "rancid::router_db -- ${name} not found in devices hash.": }
+  file { "${rancid::homedir}/${name}/router.db":
+    ensure  => 'file',
+    owner   => $rancid::user,
+    group   => $rancid::group,
+    mode    => $router_db_mode,
+    content => template('rancid/router.db.erb'),
+    require => Exec["rancid-cvs-${name}"],
   }
 }

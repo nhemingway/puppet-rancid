@@ -64,7 +64,7 @@ LOCKTIME="<%= @locktime %>"; export LOCKTIME
 PAR_COUNT="<%= @parcount %>"; export PAR_COUNT
 #
 # list of rancid groups
-LIST_OF_GROUPS="<%= @groups.flatten.join(' ') %>"
+LIST_OF_GROUPS="<%= @devices.keys.flatten.join(' ') %>"
 #
 # For each group, define a list of people to receive the diffs.
 # in sendmail's /etc/aliases.

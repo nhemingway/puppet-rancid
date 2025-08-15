@@ -72,7 +72,7 @@ describe 'rancid' do
       let(:params) { { vcs: 'cvs' } }
 
       it do
-        is_expected.to contain_file('rancid_config')
+        is_expected.to contain_file('/etc/rancid/rancid.conf')
           .with_content(/^RCSSYS=cvs;/)
           .with_content(%r{^CVSROOT=\$BASEDIR/CVS;})
       end
@@ -82,7 +82,7 @@ describe 'rancid' do
       let(:params) { { vcs: 'cvs', vcsroot: '/my/repo' } }
 
       it do
-        is_expected.to contain_file('rancid_config')
+        is_expected.to contain_file('/etc/rancid/rancid.conf')
           .with_content(/^RCSSYS=cvs;/)
           .with_content(%r{^CVSROOT=/my/repo;})
       end
@@ -92,7 +92,7 @@ describe 'rancid' do
       let(:params) { { vcs: 'svn' } }
 
       it do
-        is_expected.to contain_file('rancid_config')
+        is_expected.to contain_file('/etc/rancid/rancid.conf')
           .with_content(%r{^CVSROOT=\$BASEDIR/svn;})
           .with_content(/^RCSSYS=svn;/)
       end
@@ -102,7 +102,7 @@ describe 'rancid' do
       let(:params) { { vcs: 'svn', vcsroot: '/my/repo' } }
 
       it do
-        is_expected.to contain_file('rancid_config')
+        is_expected.to contain_file('/etc/rancid/rancid.conf')
           .with_content(/^RCSSYS=svn;/)
           .with_content(%r{^CVSROOT=/my/repo;})
       end
@@ -112,7 +112,7 @@ describe 'rancid' do
       let(:params) { { vcs: 'git' } }
 
       it do
-        is_expected.to contain_file('rancid_config')
+        is_expected.to contain_file('/etc/rancid/rancid.conf')
           .with_content(%r{^CVSROOT=\$BASEDIR/.git;})
           .with_content(/^RCSSYS=git;/)
       end
@@ -122,7 +122,7 @@ describe 'rancid' do
       let(:params) { { vcs: 'git', vcsroot: '/my/repo' } }
 
       it do
-        is_expected.to contain_file('rancid_config')
+        is_expected.to contain_file('/etc/rancid/rancid.conf')
           .with_content(/^RCSSYS=git;/)
           .with_content(%r{^CVSROOT=/my/repo;})
       end

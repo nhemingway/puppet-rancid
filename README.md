@@ -77,7 +77,7 @@ must be a digit.
 
 groups
 ------
-Array of rancid groups.
+This used to be a parameter.  It is now inferred from the keys of the devices hash.
 
 devices
 -------
@@ -174,11 +174,6 @@ rancid::cloginrc_content: |
   add method * ssh
   add user * rancid
   add password * mypassword
-
-rancid::groups:
-  - 'routers'
-  - 'switches'
-  - 'firewalls'
 
 rancid::devices:
   routers:

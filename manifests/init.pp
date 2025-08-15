@@ -10,7 +10,6 @@ class rancid (
   Integer[1]                     $locktime,
   Integer[1]                     $parcount,
   Optional[Stdlib::Fqdn]         $maildomain,
-  Array[String]                  $groups,
   Hash                           $devices,
   Array                          $packages,
   Stdlib::Absolutepath           $rancid_config,
@@ -120,9 +119,9 @@ class rancid (
     require => Package[$packages],
   }
 
-  if ( $devices ) {
-    rancid::router_db { $groups:
-      devices         => $devices,
+  $devices.each |$group, $group_devices| {
+    rancid::group { $group:
+      devices         => $group_devices,
       rancid_path_env => $rancid_path_env,
       vcs_remote_urls => $vcs_remote_urls,
       subscribe       => File[$rancid_config],

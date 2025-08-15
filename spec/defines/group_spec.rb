@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe 'rancid::router_db' do
+describe 'rancid::group' do
   let(:title) { 'group1' }
 
   let(:facts) do
@@ -13,27 +13,25 @@ describe 'rancid::router_db' do
     }
   end
 
-  let(:params) {
+  let(:params) do
     {
       rancid_path_env: ['/bin', '/usr/bin'],
     }
-  }
+  end
 
   context 'when generating router.db' do
     let(:params) do
       super().merge(
         {
           devices: {
-            'group1' => {
-              'foo.mydomain' => {
-                'hostname' => 'foo.mydomain',
-                'type' => 'cisco',
-                'status' => 'up',
-              }
-            }
+            'foo.mydomain' => {
+              'hostname' => 'foo.mydomain',
+              'type' => 'cisco',
+              'status' => 'up',
+            },
           },
           router_db_mode: '0123',
-        }
+        },
       )
     end
 
@@ -51,20 +49,18 @@ describe 'rancid::router_db' do
       super().merge(
         {
           devices: {
-            'group1' => {
-              'foo.mydomain' => {
-                'hostname' => 'foo.mydomain',
-                'type' => 'cisco',
-                'status' => 'up',
-              },
-              'bar.mydomain' => {
-                'hostname' => 'bar.mydomain',
-                'type' => 'dnos10',
-                'status' => 'up',
-              },
+            'foo.mydomain' => {
+              'hostname' => 'foo.mydomain',
+              'type' => 'cisco',
+              'status' => 'up',
+            },
+            'bar.mydomain' => {
+              'hostname' => 'bar.mydomain',
+              'type' => 'dnos10',
+              'status' => 'up',
             },
           },
-          router_db_mode: '0123',
+          router_db_mode: '0321',
         },
       )
     end
@@ -74,7 +70,7 @@ describe 'rancid::router_db' do
         .with_content(/\Abar.mydomain;dnos10;up\nfoo.mydomain;cisco;up\Z/)
         .with_owner('rancid')
         .with_group('rancid')
-        .with_mode('0123')
+        .with_mode('0321')
     end
   end
 
