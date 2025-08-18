@@ -19,6 +19,7 @@ jobs:
           - 8
         fixtures:
           - .fixtures.yml
+          - .fixtures-latest.yml
         include:
         - puppet: 7
           ruby: 2.7.8
