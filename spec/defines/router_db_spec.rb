@@ -1,93 +1,116 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 describe 'rancid::router_db' do
   let(:title) { 'group1' }
 
-  let(:facts) { { :osfamily => 'Debian' } }
-
-  context 'Use correct field separator' do
-    let(:params) {
-      { :devices => {
-          'group1' => {
-            'foo.mydomain' => {
-              'hostname' => 'foo.mydomain',
-              'type' => 'cisco',
-              'status' => 'up',
-            }
-          }
-        },
-        :router_db_mode => 0123,
-      }
-    }
-
-    it {
-      should contain_file('/var/lib/rancid/group1/router.db')
-               .with_content(/^foo.mydomain;cisco;up$/)
-               .with_owner('rancid')
-               .with_group('rancid')
-               .with_mode(0123)
+  let(:facts) do
+    {
+      osfamily: 'Debian',
     }
   end
 
-  context 'router.db should be stable with multiple entries' do
-    let(:params) {
-      { :devices => {
-          'group1' => {
-            'foo.mydomain' => {
-              'hostname' => 'foo.mydomain',
-              'type' => 'cisco',
-              'status' => 'up',
+  let(:params) do
+    {
+      rancid_cvs_path: '/bin:/usr/bin',
+    }
+  end
+
+  context 'when generating router.db' do
+    let(:params) do
+      super().merge(
+        {
+          devices: {
+            'group1' => {
+              'foo.mydomain' => {
+                'hostname' => 'foo.mydomain',
+                'type' => 'cisco',
+                'status' => 'up',
+              },
             },
-            'bar.mydomain' => {
-              'hostname' => 'bar.mydomain',
-              'type' => 'dnos10',
-              'status' => 'up',
-            }
-          }
+          },
+          router_db_mode: '0123',
         },
-        :router_db_mode => 0123,
-      }
-    }
+      )
+    end
 
-    it {
-      should contain_file('/var/lib/rancid/group1/router.db')
-               .with_content(/\Abar.mydomain;dnos10;up\nfoo.mydomain;cisco;up\Z/)
-               .with_owner('rancid')
-               .with_group('rancid')
-               .with_mode(0123)
-    }
+    it 'uses the correct field separator' do
+      is_expected.to contain_file('/var/lib/rancid/group1/router.db')
+        .with_content(/^foo.mydomain;cisco;up$/)
+        .with_owner('rancid')
+        .with_group('rancid')
+        .with_mode('0123')
+    end
   end
 
-  context 'managing remote urls' do
-    context 'we are managing them' do
-      let(:params) {
-        { :vcs_remote_urls => {
-            'group1' => 'http://my-server/my-path.git',
+  context 'with multiple entries for a group' do
+    let(:params) do
+      super().merge(
+        {
+          devices: {
+            'group1' => {
+              'foo.mydomain' => {
+                'hostname' => 'foo.mydomain',
+                'type' => 'cisco',
+                'status' => 'up',
+              },
+              'bar.mydomain' => {
+                'hostname' => 'bar.mydomain',
+                'type' => 'dnos10',
+                'status' => 'up',
+              },
+            },
           },
-        }
-      }
+          router_db_mode: '0123',
+        },
+      )
+    end
 
-      it 'should point at the requested remote url' do
-        should contain_exec('setup git remote group1')
-                 .with_command('git remote set-url origin http://my-server/my-path.git')
-                 .with_cwd('/var/lib/rancid/group1')
+    it 'router.db is stable' do
+      is_expected.to contain_file('/var/lib/rancid/group1/router.db')
+        .with_content(/\Abar.mydomain;dnos10;up\nfoo.mydomain;cisco;up\Z/)
+        .with_owner('rancid')
+        .with_group('rancid')
+        .with_mode('0123')
+    end
+  end
+
+  context 'with remote urls' do
+    context 'when we are managing them' do
+      let(:params) do
+        super().merge(
+          {
+            vcs_remote_urls: {
+              'group1' => 'http://my-server/my-path.git',
+            },
+          },
+        )
       end
 
-      it 'should deploy a post commit hook to auto-push to the remote' do
-        should contain_file('post-commit hook for group1')
+      it 'points at the requested remote url' do
+        is_expected.to contain_exec('setup git remote group1')
+          .with_command('git remote set-url origin http://my-server/my-path.git')
+          .with_cwd('/var/lib/rancid/group1')
       end
 
-      it 'should remove the default (local) remote' do
-        should contain_file('rancid default git remote group1')
+      it 'deploys a post commit hook to auto-push to the remote' do
+        is_expected.to contain_file('post-commit hook for group1')
+      end
+
+      it 'removes the default (local) remote' do
+        is_expected.to contain_file('rancid default git remote group1')
       end
     end
 
-    context 'we are not managing them' do
-      let(:params) {
-        {}
-      }
+    context 'when we are not managing them' do
+      let(:params) do
+        super().merge(
+          {},
+        )
+      end
 
       it {
-        should_not contain_exec(/setup git remote/)
+        is_expected.not_to contain_exec(/setup git remote/)
       }
     end
   end

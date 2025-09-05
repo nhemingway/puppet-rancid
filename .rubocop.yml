@@ -1,0 +1,45 @@
+plugins:
+  - rubocop-i18n
+  - rubocop-performance
+  - rubocop-rake
+  - rubocop-rspec
+
+AllCops:
+  NewCops: enable
+  Exclude:
+    - spec/fixtures/**/*
+    - vendor/**/*
+
+Metrics/BlockLength:
+  Description: Specs need to have _simpler_ code so that they can be
+    "obviously no bugs" (rather than "no obvious bugs").  That tends to make them
+    more repetitive and longer
+  Exclude:
+    - spec/**/*.rb
+
+RSpec/DescribeClass:
+  Enabled: false
+
+RSpec/HookArgument:
+  EnforcedStyle: each
+
+RSpec/ImplicitSubject:
+  EnforcedStyle: single_statement_only
+
+RSpec/NestedGroups:
+  Enabled: false
+
+Style/TrailingCommaInArrayLiteral:
+  Description: Prefer always trailing comma on multiline literals. This makes diffs,
+    and re-ordering nicer.
+  EnforcedStyleForMultiline: comma
+
+Style/TrailingCommaInArguments:
+  Description: Prefer always trailing comma on multiline argument lists. This makes
+    diffs, and re-ordering nicer.
+  EnforcedStyleForMultiline: comma
+
+Style/TrailingCommaInHashLiteral:
+  Description: Prefer always trailing comma on multiline literals. This makes diffs,
+    and re-ordering nicer.
+  EnforcedStyleForMultiline: comma
