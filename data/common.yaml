@@ -1,0 +1,32 @@
+---
+rancid::filterpwds: ALL
+rancid::nocommstr: true
+rancid::maxrounds: 4
+rancid::oldtime: 4
+rancid::locktime: 4
+rancid::parcount: 5
+rancid::maildomain: ~
+rancid::groups:
+  - routers
+  - switches
+  - firewalls
+rancid::devices: {}
+rancid::packages:
+  - rancid
+rancid::rancid_config: /etc/rancid/rancid.conf
+rancid::logdir: /var/log/rancid
+rancid::user: rancid
+rancid::group: rancid
+rancid::shell: /bin/bash
+rancid::cron_d_file: /etc/cron.d/rancid
+rancid::cloginrc_content: "# This file is being maintained by Puppet.
+
+  # DO NOT EDIT
+
+  # Consult man page for cloginrc(5) for help."
+rancid::show_cloginrc_diff: true
+rancid::vcs: cvs
+rancid::manage_vcs_packages: false
+rancid::vcs_remote_urls: {}
+rancid::vcsroot: ~
+...

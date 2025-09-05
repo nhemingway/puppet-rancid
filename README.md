@@ -28,7 +28,7 @@ the future parser and Puppet v4 with Ruby versions 1.8.7, 1.9.3, 2.0.0,
 
 ## Parameters
 
-    'USE_DEFAULTS' denotes that defaults are made based on osfamily and other such factors.
+All defaults are set via hiera data files
 
 filterpwds
 ----------
@@ -44,21 +44,14 @@ NOTE: When setting password filtering be aware that RANCID is sending
 configuration and changes via email, so including any passwords is not
 recommended. String can be 'ALL', 'YES', or 'NO'.
 
-- *Default*: 'ALL'
-
 nocommstr
 ---------
-Optionally strip snmp community strings from the configs. String can be 'YES'
-or 'NO'.
-
-- *Default*: 'YES'
+Optionally strip snmp community strings from the configs. Boolean.
 
 maxrounds
 ---------
 Defines how many times rancid should retry collection of
 devices that fail. The minimum is 1.
-
-- *Default*: '4'
 
 oldtime
 -------
@@ -67,14 +60,10 @@ since a successful collection of a device’s configuration and when
 control_rancid(1) should start complaining about failures. The value should be
 greater than the number of hours between rancid-run cron runs.
 
-- *Default*: '4'
-
 locktime
 --------
 Defines the number of hours a group’s lock file may age before rancid starts to
 complain about a hung collection. String that must be a digit.
-
-- *Default*: '4'
 
 parcount
 --------
@@ -86,107 +75,73 @@ cautious. If collections are not completing quickly enough for users, use trial
 and error of speed versus system load to find a suitable value. String that
 must be a digit.
 
-- *Default*: '5'
-
 groups
 ------
 Array of rancid groups.
-
-- *Default*: [ 'routers', 'switches', 'firewalls' ]
 
 devices
 -------
 Hash of devices. See Sample Hiera Structure.
 
-- *Default*: undef
-
 packages
 --------
-- *Default*: 'USE_DEFAULTS'
+OS packages that will be installed.
 
 rancid_config
 -------------
 Path to rancid.conf.
 
-- *Default*: 'USE_DEFAULTS'
-
 rancid_path_env
 ---------------
 PATH to use in rancid.conf.
-
-- *Default*: 'USE_DEFAULTS'
 
 homedir
 -------
 Rancid user's home directory.
 
-- *Default*: 'USE_DEFAULTS'
-
 logdir
 ------
 Directory for storing rancid logs.
-
-- *Default*: 'USE_DEFAULTS'
 
 user
 ----
 Rancid user.
 
-- *Default*: 'USE_DEFAULTS'
-
 group
 -----
 Rancid group
-
-- *Default*: 'USE_DEFAULTS'
 
 shell
 -----
 Rancid user's shell.
 
-- *Default*: 'USE_DEFAULTS'
-
 cron_d_file
 -----------
 Path to file in cron.d that will periodically execute rancid.
-
-- *Default*: '/etc/cron.d/rancid'
 
 cloginrc_content
 ----------------
 Content of <tt>~rancid/.cloginrc</tt>
 
-- *Default*: 'USE_DEFAULTS'
-
 show_cloginrc_diff
 ------------------
 Whether to show diffs of <tt>~rancid/.cloginrc</tt> during puppet runs.
-
-- *Default*: true
 
 vcs
 ---
 Which version control system to use.  Must be one of git, svn, cvs or USE_DEFAULTS.
 
-- *Default*: 'USE_DEFAULTS'
-
 vcsroot
 -------
 Use a different directory than the default for the vcs you've chosen.
-
-- *Default*: 'USE_DEFAULTS'
 
 manage_vcs_packages
 -------------------
 If true, we will ensure that the appropriate packages are installed for the vcs you've chosen.
 
-- *Default*: false
-
 vcs_remote_urls
 ---------------
 Hash (keyed by group name) of remote urls. See Sample Hiera Structure.
-
-- *Default*: undef
 
 ===
 
@@ -201,19 +156,13 @@ devices
 -------
 Hash of devices. See Sample Hiera Structure.
 
-- *Default*: undef
-
 rancid_cvs_path
 ---------------
 PATH for finding <tt>rancid-cvs</tt> and <tt>test</tt> programs.
 
-- *Default*: '/bin:/usr/bin',
-
 router_db_mode
 --------------
 Mode of <tt>router.db</tt> files.
-
-- *Default*: '0640',
 
 ===
 

@@ -1,0 +1,8 @@
+---
+rancid::rancid_path_env:
+  - /usr/lib/rancid/bin
+  - /bin
+  - /usr/bin
+  - /usr/local/bin
+rancid::homedir: /var/lib/rancid
+...

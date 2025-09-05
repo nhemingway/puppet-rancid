@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
+
 describe 'rancid' do
-  context 'with default params on EL 6' do
+  context 'with default params on RedHat' do
     let(:facts) do
       {
-        osfamily: 'RedHat',
-        operatingsystemmajrelease: '6',
+        os: {
+          family: 'RedHat',
+        },
       }
     end
 
@@ -32,7 +34,9 @@ describe 'rancid' do
   context 'with default params on osfamily Debian' do
     let(:facts) do
       {
-        osfamily: 'Debian',
+        os: {
+          family: 'Debian',
+        },
       }
     end
 
@@ -58,7 +62,9 @@ describe 'rancid' do
   context 'when switching version control systems' do
     let(:facts) do
       {
-        osfamily: 'Debian',
+        os: {
+          family: 'Debian',
+        },
       }
     end
 

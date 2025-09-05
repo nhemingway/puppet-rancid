@@ -1,20 +1,23 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
+
 describe 'rancid::router_db' do
   let(:title) { 'group1' }
 
   let(:facts) do
     {
-      osfamily: 'Debian',
+      os: {
+        family: 'Debian',
+      },
     }
   end
 
-  let(:params) do
+  let(:params) {
     {
-      rancid_cvs_path: '/bin:/usr/bin',
+      rancid_path_env: ['/bin', '/usr/bin'],
     }
-  end
+  }
 
   context 'when generating router.db' do
     let(:params) do
@@ -26,11 +29,11 @@ describe 'rancid::router_db' do
                 'hostname' => 'foo.mydomain',
                 'type' => 'cisco',
                 'status' => 'up',
-              },
-            },
+              }
+            }
           },
           router_db_mode: '0123',
-        },
+        }
       )
     end
 
